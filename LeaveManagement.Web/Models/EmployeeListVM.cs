@@ -4,7 +4,7 @@ namespace LeaveManagement.Web.Models
 {
     public class EmployeeListVM
     {
-        public int Id { get; set; }
+        public string Id { get; set; }
 
         [Display(Name = "First Name")]
         public string FirstName { get; set; }
