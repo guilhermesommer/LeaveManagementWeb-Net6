@@ -64,7 +64,7 @@ namespace LeaveManagement.Web.Controllers
             {
                 await _leaveRequestRepository.ChangeApprovalStatus(id, approved);
             }
-            catch(Exception ex)
+            catch(Exception)
             {
                 throw;
             }
@@ -103,7 +103,7 @@ namespace LeaveManagement.Web.Controllers
                     ModelState.AddModelError(string.Empty, "You have exceeded your allocation with this request.");
                 }
             }
-            catch(Exception ex)
+            catch(Exception)
             {
                 ModelState.AddModelError(string.Empty, "An error has ocurred. Please try again later.");
             }
@@ -137,7 +137,7 @@ namespace LeaveManagement.Web.Controllers
             {
                 await _leaveRequestRepository.CancelLeaveRequest(id);
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 throw;
             }

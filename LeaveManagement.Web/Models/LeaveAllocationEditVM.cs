@@ -6,6 +6,6 @@
 
         public int LeaveTypeId { get; set; }
 
-        public EmployeeListVM? Employee { get; set; }
+        public EmployeeListVM Employee { get; set; }
     }
 }

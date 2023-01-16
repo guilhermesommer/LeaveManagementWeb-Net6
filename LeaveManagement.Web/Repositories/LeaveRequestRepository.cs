@@ -103,7 +103,7 @@ namespace LeaveManagement.Web.Repositories
             return _mapper.Map<List<LeaveRequestVM>>(await _context.LeaveRequests.Where(q => q.RequestingEmployeeId== employeeId).ToListAsync());
         }
 
-        public async Task<LeaveRequestVM?> GetLeaveRequestAsync(int? id)
+        public async Task<LeaveRequestVM> GetLeaveRequestAsync(int? id)
         {
             var leaveRequest = await _context.LeaveRequests.Include(q => q.LeaveType).FirstOrDefaultAsync(q => q.Id == id);
 
