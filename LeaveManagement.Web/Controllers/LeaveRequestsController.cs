@@ -1,16 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using AutoMapper;
+using LeaveManagement.Common.Constants;
+using LeaveManagement.Data;
+using LeaveManagement.Application.Contracts;
+using LeaveManagement.Common.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
-using Microsoft.EntityFrameworkCore;
-using LeaveManagement.Web.Data;
-using LeaveManagement.Web.Models;
-using AutoMapper;
-using LeaveManagement.Web.Contracts;
-using Microsoft.AspNetCore.Authorization;
-using LeaveManagement.Web.Constants;
 
 namespace LeaveManagement.Web.Controllers
 {
@@ -20,14 +15,17 @@ namespace LeaveManagement.Web.Controllers
         private readonly ApplicationDbContext _context;
         private readonly IMapper _mapper;
         private readonly ILeaveRequestRepository _leaveRequestRepository;
+        private readonly ILogger<LeaveRequestsController> _logger;
 
         public LeaveRequestsController(ApplicationDbContext context,
             IMapper mapper,
-            ILeaveRequestRepository leaveRequestRepository)
+            ILeaveRequestRepository leaveRequestRepository,
+            ILogger<LeaveRequestsController> logger)
         {
             _context = context;
             this._mapper = mapper;
             this._leaveRequestRepository = leaveRequestRepository;
+            this._logger = logger;
         }
 
         [Authorize(Roles = Roles.Administrator)]
@@ -64,8 +62,9 @@ namespace LeaveManagement.Web.Controllers
             {
                 await _leaveRequestRepository.ChangeApprovalStatus(id, approved);
             }
-            catch(Exception)
+            catch (Exception ex)
             {
+                _logger.LogError(ex, "Error approving Leave Request");
                 throw;
             }
 
@@ -103,8 +102,9 @@ namespace LeaveManagement.Web.Controllers
                     ModelState.AddModelError(string.Empty, "You have exceeded your allocation with this request.");
                 }
             }
-            catch(Exception)
+            catch (Exception ex)
             {
+                _logger.LogError(ex, "Error creating Leave Request");
                 ModelState.AddModelError(string.Empty, "An error has ocurred. Please try again later.");
             }
 
@@ -137,8 +137,9 @@ namespace LeaveManagement.Web.Controllers
             {
                 await _leaveRequestRepository.CancelLeaveRequest(id);
             }
-            catch (Exception)
+            catch (Exception ex)
             {
+                _logger.LogError(ex, "Error cancelling Leave Request");
                 throw;
             }
 
@@ -178,7 +179,7 @@ namespace LeaveManagement.Web.Controllers
         //    {
         //        _context.LeaveRequests.Remove(leaveRequest);
         //    }
-            
+
         //    await _context.SaveChangesAsync();
         //    return RedirectToAction(nameof(Index));
         //}
